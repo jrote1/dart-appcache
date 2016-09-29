@@ -2,7 +2,7 @@ library appcache;
 
 import 'package:barback/barback.dart';
 import 'dart:async' show Future;
-import 'package:html5lib/parser.dart';
+//import 'package:html5lib/parser.dart';
 
 class TransformOptions {
   List<String> entryPoints;
@@ -48,16 +48,7 @@ class AppCacheTransformer extends AggregateTransformer {
 
   Future apply(AggregateTransform transform) {
     return transform.primaryInputs.toList().then((assets) {
-      if (!options.debug && transform.key == "entry-points") {
-        for (var i in assets) {
-          return i.readAsString().then((content) {
-            var document = parse(content);
-            var html = document.getElementsByTagName("html").first;
-            html.attributes["manifest"] = "app.appcache";
-            transform.addOutput(new Asset.fromString(i.id, document.outerHtml));
-          });
-        }
-      } else if (!options.debug) {
+      if (!options.debug) {
         var buffer = new StringBuffer()
             ..writeln('CACHE MANIFEST')
             ..writeln('#Generated: ${new DateTime.now()}')
